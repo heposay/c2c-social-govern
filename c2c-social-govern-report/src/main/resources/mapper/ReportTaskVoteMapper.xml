@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepo.c2c.social.govern.report.mapper.ReportTaskVoteMapper">
+  <resultMap id="BaseResultMap" type="com.hepo.c2c.social.govern.report.domain.ReportTaskVote">
+    <!--@mbg.generated-->
+    <!--@Table report_task_vote-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="reviewer_id" jdbcType="INTEGER" property="reviewerId" />
+    <result column="report_task_id" jdbcType="INTEGER" property="reportTaskId" />
+    <result column="vote_result" jdbcType="TINYINT" property="voteResult" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, reviewer_id, report_task_id, vote_result
+  </sql>
+  <update id="updateBatch" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update report_task_vote
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="reviewer_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.reviewerId,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="report_task_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.reportTaskId,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="vote_result = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.voteResult,jdbcType=TINYINT}
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into report_task_vote
+    (reviewer_id, report_task_id, vote_result)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.reviewerId,jdbcType=INTEGER}, #{item.reportTaskId,jdbcType=INTEGER}, #{item.voteResult,jdbcType=TINYINT}
+        )
+    </foreach>
+  </insert>
+</mapper>

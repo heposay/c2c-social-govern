@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: c2c-social-govern-report
+  cloud:
+    nacos:
+      #配置中心
+      config:
+        enabled: true
+        server-addr: 127.0.0.1:8848
+        ext-config:
+          - dataId: spring-druid.yml
+            refresh: true
+logging:
+  level:
+    com:
+      alibaba:
+        cloud:
+          nacos:
+            client: debug
+

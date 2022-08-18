@@ -1,0 +1,39 @@
+server:
+  port: 8082
+spring:
+  cloud:
+    nacos:
+      #服务发现
+      discovery:
+        server-addr: 127.0.0.1:8848
+        enabled: true
+      username: nacos
+      password: nacos
+  main:
+    allow-bean-definition-overriding: true
+logging:
+  level:
+    com:
+      alibaba:
+        cloud:
+          nacos:
+            client: debug
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - '*'
+  endpoint:
+    health:
+      show-details: always
+
+dubbo:
+  scan:
+    base-packages:
+      - com.hepo.c2c.social.govern.reviewer.service
+  protocol:
+    name: dubbo
+    port: 20990
+  registry:
+    address: spring-cloud://localhost

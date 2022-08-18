@@ -1,0 +1,35 @@
+server:
+  port: 8081
+spring:
+  cloud:
+    nacos:
+      #服务发现
+      discovery:
+        server-addr: 127.0.0.1:8848
+        enabled: true
+      username: nacos
+      password: nacos
+logging:
+  level:
+    com:
+      alibaba:
+        cloud:
+          nacos:
+            client: debug
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - '*'
+  endpoint:
+    health:
+      show-details: always
+#dubbo配置
+dubbo:
+  cloud:
+    #订阅的服务
+    subscribed-services: c2c-social-govern-reviewer,c2c-social-govern-reward
+  scan:
+    base-packages:
+      - com.hepo.c2c.social.govern.reward

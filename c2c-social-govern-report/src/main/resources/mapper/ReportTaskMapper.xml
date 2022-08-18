@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepo.c2c.social.govern.report.mapper.ReportTaskMapper">
+  <resultMap id="BaseResultMap" type="com.hepo.c2c.social.govern.report.domain.ReportTask">
+    <!--@mbg.generated-->
+    <!--@Table report_task-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="report_user_id" jdbcType="INTEGER" property="reportUserId" />
+    <result column="report_content" jdbcType="VARCHAR" property="reportContent" />
+    <result column="target_id" jdbcType="INTEGER" property="targetId" />
+    <result column="vote_result" jdbcType="TINYINT" property="voteResult" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `type`, report_user_id, report_content, target_id, vote_result
+  </sql>
+  <update id="updateBatch" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update report_task
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="`type` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.type,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="report_user_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.reportUserId,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="report_content = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.reportContent,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="target_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.targetId,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="vote_result = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=INTEGER} then #{item.voteResult,jdbcType=TINYINT}
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=INTEGER}
+    </foreach>
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into report_task
+    (`type`, report_user_id, report_content, target_id, vote_result)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.type,jdbcType=VARCHAR}, #{item.reportUserId,jdbcType=INTEGER}, #{item.reportContent,jdbcType=VARCHAR}, 
+        #{item.targetId,jdbcType=INTEGER}, #{item.voteResult,jdbcType=TINYINT})
+    </foreach>
+  </insert>
+</mapper>
