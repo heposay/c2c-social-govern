@@ -16,12 +16,4 @@ import javax.annotation.Resource;
 @RequestMapping("/reviewer")
 public class ReviewerController {
 
-    @Resource
-    private ReviewerService reviewerService;
-
-    @RequestMapping("hello")
-    public String sayHello(String name) {
-        return reviewerService.testRPC(name);
-    }
-
 }

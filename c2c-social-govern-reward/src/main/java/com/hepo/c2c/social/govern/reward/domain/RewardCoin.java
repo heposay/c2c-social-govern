@@ -16,11 +16,11 @@ import lombok.NoArgsConstructor;
 public class RewardCoin {
     @TableId(value = "id", type = IdType.AUTO)
     @ApiModelProperty(value = "id")
-    private Integer id;
+    private Long id;
 
     @TableField(value = "reviewer_id")
     @ApiModelProperty(value = "评审员id")
-    private Integer reviewerId;
+    private Long reviewerId;
 
     @TableField(value = "coins")
     @ApiModelProperty(value = "金币")

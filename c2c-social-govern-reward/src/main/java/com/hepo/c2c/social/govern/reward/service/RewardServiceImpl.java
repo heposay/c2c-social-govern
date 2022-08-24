@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hepo.c2c.social.govern.reward.api.service.RewardService;
 import com.hepo.c2c.social.govern.reward.domain.RewardCoin;
 import com.hepo.c2c.social.govern.reward.mapper.RewardMapper;
-import org.apache.dubbo.common.constants.LoadbalanceRules;
 import org.apache.dubbo.config.annotation.DubboService;
 
 import java.util.List;
@@ -14,7 +13,7 @@ import java.util.List;
  *
  * @author linhaibo
  */
-@DubboService(group = "DEFAULT_GROUP", interfaceClass = RewardService.class, cluster = "failfast", loadbalance = LoadbalanceRules.ROUND_ROBIN)
+@DubboService(group = "DEFAULT_GROUP", interfaceClass = RewardService.class, cluster = "failfast")
 public class RewardServiceImpl extends ServiceImpl<RewardMapper, RewardCoin> implements RewardService {
 
 

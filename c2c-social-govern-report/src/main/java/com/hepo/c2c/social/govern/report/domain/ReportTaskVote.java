@@ -18,17 +18,32 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @TableName(value = "report_task_vote")
 public class ReportTaskVote {
+
+    /**
+     * 未投票
+     */
+    public static final Integer UNKNOWN = -1;
+    /**
+     * 投票通过
+     */
+    public static final Integer APPROVED = 1;
+    /**
+     * 投票未通过
+     */
+    public static final Integer UNAPPROVED = 2;
+
+
     @TableId(value = "id", type = IdType.AUTO)
     @ApiModelProperty(value="")
-    private Integer id;
+    private Long id;
 
     @TableField(value = "reviewer_id")
     @ApiModelProperty(value="")
-    private Integer reviewerId;
+    private Long reviewerId;
 
     @TableField(value = "report_task_id")
     @ApiModelProperty(value="")
-    private Integer reportTaskId;
+    private Long reportTaskId;
 
     @TableField(value = "vote_result")
     @ApiModelProperty(value="")

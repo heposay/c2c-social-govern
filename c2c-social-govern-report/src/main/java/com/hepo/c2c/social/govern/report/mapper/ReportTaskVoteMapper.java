@@ -28,4 +28,12 @@ public interface ReportTaskVoteMapper extends BaseMapper<ReportTaskVote> {
      * @return 新增条数
      */
     int batchInsert(@Param("list") List<ReportTaskVote> list);
+
+    /**
+     * 始化这批评审员对举报任务的投票状态
+     *
+     * @param reviewerIds 评审员ID集合
+     * @param taskId      举报任务ID
+     */
+    void initVotes(List<Long> reviewerIds, Long taskId);
 }

@@ -11,35 +11,41 @@ import lombok.NoArgsConstructor;
 
 /**
  * 举报任务实体类
+ *
  * @author linhaibo
  */
-@ApiModel(value="举报任务实体类")
+@ApiModel(value = "举报任务实体类")
 @Data
 @NoArgsConstructor
 @TableName(value = "report_task")
 public class ReportTask {
+
+    public static final Integer VOTE_RESULT_UNKNOWN = -1;
+    public static final Integer VOTE_RESULT_APPROVED = 1;
+    public static final Integer VOTE_RESULT_UNAPPROVED = 2;
+
     @TableId(value = "id", type = IdType.AUTO)
-    @ApiModelProperty(value="")
-    private Integer id;
+    @ApiModelProperty(value = "")
+    private Long id;
 
     @TableField(value = "`type`")
-    @ApiModelProperty(value="")
+    @ApiModelProperty(value = "")
     private String type;
 
     @TableField(value = "report_user_id")
-    @ApiModelProperty(value="")
+    @ApiModelProperty(value = "")
     private Integer reportUserId;
 
     @TableField(value = "report_content")
-    @ApiModelProperty(value="")
+    @ApiModelProperty(value = "")
     private String reportContent;
 
     @TableField(value = "target_id")
-    @ApiModelProperty(value="")
+    @ApiModelProperty(value = "")
     private Integer targetId;
 
     @TableField(value = "vote_result")
-    @ApiModelProperty(value="")
+    @ApiModelProperty(value = "")
     private Integer voteResult;
 
     public static final String COL_ID = "id";

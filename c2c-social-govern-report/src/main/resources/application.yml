@@ -27,9 +27,9 @@ management:
       show-details: always
 #dubbo配置
 dubbo:
-  cloud:
-    #订阅的服务
-    subscribed-services: c2c-social-govern-reviewer,c2c-social-govern-reward
+  version: 1.0.0
+  registry:
+    address: nacos://localhost:8848/?username=nacos&password=nacos
   scan:
     base-packages:
       - com.hepo.c2c.social.govern.reward

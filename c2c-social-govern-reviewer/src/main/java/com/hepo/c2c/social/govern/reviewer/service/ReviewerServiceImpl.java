@@ -1,21 +1,20 @@
 package com.hepo.c2c.social.govern.reviewer.service;
 
-import com.hepo.c2c.social.govern.reviewer.api.service.ReviewerService;
-import org.apache.dubbo.common.constants.LoadbalanceRules;
-import org.apache.dubbo.config.annotation.DubboService;
-
-import java.util.List;
-
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hepo.c2c.social.govern.reviewer.api.service.ReviewerService;
 import com.hepo.c2c.social.govern.reviewer.domain.ReviewerTaskStatus;
 import com.hepo.c2c.social.govern.reviewer.mapper.ReviewerMapper;
+import org.apache.dubbo.config.annotation.DubboService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 评审员接口实现类
  *
  * @author linhaibo
  */
-@DubboService(interfaceClass = ReviewerService.class, cluster = "failfast", loadbalance = LoadbalanceRules.ROUND_ROBIN)
+@DubboService(interfaceClass = ReviewerService.class, cluster = "failfast")
 public class ReviewerServiceImpl extends ServiceImpl<ReviewerMapper, ReviewerTaskStatus> implements ReviewerService {
 
     /**
@@ -26,7 +25,24 @@ public class ReviewerServiceImpl extends ServiceImpl<ReviewerMapper, ReviewerTas
      */
     @Override
     public List<Long> selectReviewers(Long reportTaskId) {
-        return null;
+        // 模拟通过算法选择一批评审员
+        System.out.println("test环境：模拟通过算法选择一批评审员");
+        List<Long> reviewerIds = new ArrayList<Long>();
+        reviewerIds.add(1L);
+        reviewerIds.add(2L);
+        reviewerIds.add(3L);
+        reviewerIds.add(4L);
+        reviewerIds.add(5L);
+
+        // 把每个评审员要执行的任务录入数据库
+        for(Long reviewerId : reviewerIds) {
+            ReviewerTaskStatus reviewerTaskStatus = new ReviewerTaskStatus();
+            reviewerTaskStatus.setReviewerId(reviewerId);
+            reviewerTaskStatus.setReportTaskId(reportTaskId);
+            reviewerTaskStatus.setStatus(ReviewerTaskStatus.PROCESSING);
+            baseMapper.insert(reviewerTaskStatus);
+        }
+        return reviewerIds;
     }
 
     /**

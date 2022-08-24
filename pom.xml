@@ -30,14 +30,14 @@
 		<spring-alibaba.version>2.1.0.RELEASE</spring-alibaba.version>
 
 		<!-- Apache Dubbo -->
-		<dubbo.version>2.7.15</dubbo.version>
+		<dubbo.version>3.0.0.preview</dubbo.version>
 		<curator.version>4.0.1</curator.version>
 
 		<!-- Apache RocketMQ -->
 		<rocketmq.starter.version>2.0.4</rocketmq.starter.version>
 		<rocketmq.version>4.9.3</rocketmq.version>
 
-		<spring-boot.version>2.3.12.RELEASE</spring-boot.version>
+		<spring-boot.version>2.3.0.RELEASE</spring-boot.version>
 		<knife4j.version>3.0.2</knife4j.version>
 		<hutool-all.version>5.4.3</hutool-all.version>
 		<druid-spring.version>1.1.23</druid-spring.version>
@@ -69,12 +69,6 @@
 				<scope>import</scope>
 			</dependency>
 
-			<dependency>
-				<groupId>com.alibaba.cloud</groupId>
-				<artifactId>spring-cloud-starter-dubbo</artifactId>
-				<version>2.2.7.RELEASE</version>
-			</dependency>
-
 			<!-- Dubbo Dependencies -->
 			<dependency>
 				<groupId>org.apache.dubbo</groupId>
@@ -82,12 +76,6 @@
 				<version>${dubbo.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-framework-bom</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 
 			<dependency>
@@ -96,17 +84,6 @@
 				<version>${dubbo.version}</version>
 			</dependency>
 
-			<dependency>
-				<groupId>org.apache.dubbo</groupId>
-				<artifactId>dubbo</artifactId>
-				<version>${dubbo.version}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.springframework</groupId>
-						<artifactId>spring-context</artifactId>
-					</exclusion>
-				</exclusions>
-			</dependency>
 			<dependency>
 				<groupId>org.apache.rocketmq</groupId>
 				<artifactId>rocketmq-client</artifactId>
@@ -179,6 +156,21 @@
 
 		</dependencies>
 	</dependencyManagement>
+
+	<repositories>
+		<repository>
+			<id>apache.snapshots.https</id>
+			<name>Apache Development Snapshot Repository</name>
+			<url>https://repository.apache.org/content/repositories/snapshots</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
 
 	<build>
 		<plugins>

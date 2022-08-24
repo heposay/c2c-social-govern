@@ -48,4 +48,8 @@
         )
     </foreach>
   </insert>
+
+  <update id="initVotes">
+
+  </update>
 </mapper>

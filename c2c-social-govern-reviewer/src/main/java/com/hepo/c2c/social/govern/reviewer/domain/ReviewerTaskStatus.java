@@ -14,17 +14,27 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @TableName(value = "reviewer_task_status")
 public class ReviewerTaskStatus {
+
+    /**
+     * 处理中
+     */
+    public static final Integer PROCESSING = 1;
+    /**
+     * 处理完毕
+     */
+    public static final Integer FINISHED = 2;
+
     @TableId(value = "id", type = IdType.AUTO)
     @ApiModelProperty(value="主键")
-    private Integer id;
+    private Long id;
 
     @TableField(value = "reviewer_id")
     @ApiModelProperty(value="评审员id")
-    private Integer reviewerId;
+    private Long reviewerId;
 
     @TableField(value = "report_task_id")
     @ApiModelProperty(value="举报任务id")
-    private Integer reportTaskId;
+    private Long reportTaskId;
 
     @TableField(value = "`status`")
     @ApiModelProperty(value="状态")

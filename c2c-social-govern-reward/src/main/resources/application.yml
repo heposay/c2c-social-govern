@@ -34,4 +34,6 @@ dubbo:
     name: dubbo
     port: 20770
   registry:
-    address: spring-cloud://localhost
+    address: nacos://127.0.0.1:8848/?username=nacos&password=nacos
+  service:
+    version: 1.0.0
