@@ -4,26 +4,20 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@ApiModel(value = "奖励金币")
 @Data
 @NoArgsConstructor
 @TableName(value = "reward_coin")
 public class RewardCoin {
     @TableId(value = "id", type = IdType.AUTO)
-    @ApiModelProperty(value = "id")
     private Long id;
 
     @TableField(value = "reviewer_id")
-    @ApiModelProperty(value = "评审员id")
     private Long reviewerId;
 
     @TableField(value = "coins")
-    @ApiModelProperty(value = "金币")
     private Integer coins;
 
     public static final String COL_ID = "id";

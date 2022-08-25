@@ -7,9 +7,12 @@ import com.hepo.c2c.social.govern.report.service.ReportTaskVoteService;
 import com.hepo.c2c.social.govern.reviewer.api.service.ReviewerService;
 import com.hepo.c2c.social.govern.reward.api.service.RewardService;
 import com.hepo.c2c.social.govern.vo.ResultObject;
-import org.apache.dubbo.config.annotation.DubboReference;
+import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,15 +37,16 @@ public class ReportTaskController {
     private ReportTaskVoteService reportTaskVoteService;
 
 
-    @DubboReference(version = "${dubbo.version}", interfaceClass = ReviewerService.class, cluster = "failfast")
+    @Reference(version = "${dubbo.version}", interfaceClass = ReviewerService.class, cluster = "failfast")
     private ReviewerService reviewerService;
 
-    @DubboReference(version = "${dubbo.version}", interfaceClass = RewardService.class, cluster = "failfast")
+    @Reference(version = "${dubbo.version}", interfaceClass = RewardService.class, cluster = "failfast")
     private RewardService rewardService;
 
 
     @GetMapping("report")
     public ResultObject<String> report(ReportTask reportTask) {
+        reportTask.setVoteResult(ReportTask.VOTE_RESULT_UNKNOWN);
         //在本地添加一个举报任务
         reportTaskService.save(reportTask);
 

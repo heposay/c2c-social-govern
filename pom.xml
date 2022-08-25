@@ -25,19 +25,20 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>8</maven.compiler.source>
 		<maven.compiler.target>8</maven.compiler.target>
-		<spring-cloud.version>Hoxton.SR12</spring-cloud.version>
 
-		<spring-alibaba.version>2.1.0.RELEASE</spring-alibaba.version>
+		<!-- springcloud Alibaba 全家桶-->
+		<spring-boot.version>2.2.4.RELEASE</spring-boot.version>
+		<spring-cloud.version>Hoxton.SR1</spring-cloud.version>
+		<spring-cloud-alibaba.version>2.2.0.RELEASE</spring-cloud-alibaba.version>
 
 		<!-- Apache Dubbo -->
-		<dubbo.version>3.0.0.preview</dubbo.version>
+		<dubbo.version>2.7.10</dubbo.version>
 		<curator.version>4.0.1</curator.version>
 
 		<!-- Apache RocketMQ -->
 		<rocketmq.starter.version>2.0.4</rocketmq.starter.version>
 		<rocketmq.version>4.9.3</rocketmq.version>
 
-		<spring-boot.version>2.3.0.RELEASE</spring-boot.version>
 		<knife4j.version>3.0.2</knife4j.version>
 		<hutool-all.version>5.4.3</hutool-all.version>
 		<druid-spring.version>1.1.23</druid-spring.version>
@@ -47,12 +48,11 @@
 		<dependencies>
 			<dependency>
 				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-dependencies</artifactId>
+				<artifactId>spring-boot-starter-parent</artifactId>
 				<version>${spring-boot.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-
 			<dependency>
 				<groupId>org.springframework.cloud</groupId>
 				<artifactId>spring-cloud-dependencies</artifactId>
@@ -60,57 +60,18 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-
 			<dependency>
 				<groupId>com.alibaba.cloud</groupId>
 				<artifactId>spring-cloud-alibaba-dependencies</artifactId>
-				<version>${spring-alibaba.version}</version>
+				<version>${spring-cloud-alibaba.version}</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
 
-			<!-- Dubbo Dependencies -->
-			<dependency>
-				<groupId>org.apache.dubbo</groupId>
-				<artifactId>dubbo-dependencies-bom</artifactId>
-				<version>${dubbo.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.dubbo</groupId>
-				<artifactId>dubbo-spring-boot-starter</artifactId>
-				<version>${dubbo.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.rocketmq</groupId>
-				<artifactId>rocketmq-client</artifactId>
-				<version>${rocketmq.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.rocketmq</groupId>
-				<artifactId>rocketmq-acl</artifactId>
-				<version>${rocketmq.version}</version>
-			</dependency>
-
+			<!-- 引入 Spring Cloud Alibaba Dubbo 相关依赖，实现呢 Dubbo 进行远程调用，并实现对其的自动配置 -->
 			<dependency>
 				<groupId>com.alibaba.cloud</groupId>
-				<artifactId>spring-cloud-alibaba-nacos-discovery</artifactId>
-				<version>2.1.0.RELEASE</version>
-			</dependency>
-
-			<dependency>
-				<groupId>com.alibaba.cloud</groupId>
-				<artifactId>spring-cloud-alibaba-nacos-config</artifactId>
-				<version>2.1.0.RELEASE</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-web</artifactId>
-				<version>2.1.1.RELEASE</version>
+				<artifactId>spring-cloud-starter-dubbo</artifactId>
 			</dependency>
 
 			<!-- mybatis代码自动生成插件 -->
@@ -130,14 +91,6 @@
 				<groupId>com.baomidou</groupId>
 				<artifactId>mybatis-plus-boot-starter</artifactId>
 				<version>3.5.2</version>
-			</dependency>
-
-			<!--整合Knife4j配置，类似于swagger-->
-			<dependency>
-				<groupId>com.github.xiaoymin</groupId>
-				<artifactId>knife4j-spring-boot-starter</artifactId>
-				<!--在引用时请在maven中央仓库搜索3.X最新版本号-->
-				<version>${knife4j.version}</version>
 			</dependency>
 
 			<!--hutool 工具类-->

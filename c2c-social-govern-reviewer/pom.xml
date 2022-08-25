@@ -19,11 +19,6 @@
     </properties>
 
     <dependencies>
-        <!--Spring MVC框架-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
         <!-- alibaba nacos整合 服务发现-->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
@@ -36,19 +31,26 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
 
-        <!-- alibaba dubbo整合 rpc框架-->
+        <!-- 引入 Spring Cloud Alibaba Dubbo 相关依赖，实现呢 Dubbo 进行远程调用，并实现对其的自动配置 -->
         <dependency>
-            <groupId>org.apache.dubbo</groupId>
-            <artifactId>dubbo-spring-boot-starter</artifactId>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-dubbo</artifactId>
+            <version>2.2.0.RELEASE</version>
         </dependency>
 
 
-        <dependency>
-            <groupId>org.apache.dubbo</groupId>
-            <artifactId>dubbo</artifactId>
-            <version>3.0.0.preview</version>
-        </dependency>
+        <!-- dubbo api docs依赖，类似于swagger-->
+<!--        <dependency>-->
+<!--            <groupId>org.apache.dubbo</groupId>-->
+<!--            <artifactId>dubbo-api-docs-annotations</artifactId>-->
+<!--            <version>2.7.8.3</version>-->
+<!--        </dependency>-->
 
+<!--        <dependency>-->
+<!--            <groupId>org.apache.dubbo</groupId>-->
+<!--            <artifactId>dubbo-api-docs-core</artifactId>-->
+<!--            <version>2.7.8.3</version>-->
+<!--        </dependency>-->
 
         <!-- 健康监控信息 -->
         <dependency>

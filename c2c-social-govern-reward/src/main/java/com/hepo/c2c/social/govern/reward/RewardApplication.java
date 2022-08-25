@@ -1,8 +1,8 @@
 package com.hepo.c2c.social.govern.reward;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
  * 发放奖励服务主入口
@@ -10,7 +10,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
  * @author linhaibo
  */
 @SpringBootApplication
-@EnableDiscoveryClient
+@MapperScan("com.hepo.c2c.social.govern.reward.mapper")
 public class RewardApplication {
     public static void main(String[] args) {
         SpringApplication.run(RewardApplication.class, args);

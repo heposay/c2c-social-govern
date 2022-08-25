@@ -14,6 +14,4 @@ public interface RewardService {
      */
     void giveReward(List<Long> reviewerIds);
 
-
-    String testRPC(String name);
 }

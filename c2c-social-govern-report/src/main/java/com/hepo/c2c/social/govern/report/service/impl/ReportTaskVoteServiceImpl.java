@@ -1,17 +1,14 @@
 package com.hepo.c2c.social.govern.report.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.hepo.c2c.social.govern.report.domain.ReportTask;
-import com.hepo.c2c.social.govern.report.service.ReportTaskService;
-import com.hepo.c2c.social.govern.report.service.ReportTaskVoteService;
-import com.hepo.c2c.social.govern.vo.ResultObject;
-import kotlin.collections.ArrayDeque;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.hepo.c2c.social.govern.report.domain.ReportTask;
 import com.hepo.c2c.social.govern.report.domain.ReportTaskVote;
 import com.hepo.c2c.social.govern.report.mapper.ReportTaskVoteMapper;
+import com.hepo.c2c.social.govern.report.service.ReportTaskService;
+import com.hepo.c2c.social.govern.report.service.ReportTaskVoteService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;

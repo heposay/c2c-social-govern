@@ -28,12 +28,12 @@ management:
 
 dubbo:
   scan:
-    base-packages:
-      - com.hepo.c2c.social.govern.reward.service
-  protocol:
-    name: dubbo
-    port: 20770
+    base-packages: com.hepo.c2c.social.govern.reward.service
+  protocols:
+    dubbo:
+      name: dubbo  #协议名称
+      port: 20880  #协议端口，-1 表示自增端口，从 20880 开始
   registry:
-    address: nacos://127.0.0.1:8848/?username=nacos&password=nacos
+    address: spring-cloud://127.0.0.1:8848  # 指定 Dubbo 服务注册中心的地址
   service:
-    version: 1.0.0
+    version: 1.0.0  #版本号

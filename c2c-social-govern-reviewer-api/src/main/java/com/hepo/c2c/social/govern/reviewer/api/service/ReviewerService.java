@@ -22,5 +22,4 @@ public interface ReviewerService {
      */
     void finishVote(Long reviewerId, Long reportTaskId);
 
-    String testRPC(String name);
 }

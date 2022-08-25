@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,7 +11,6 @@ import lombok.NoArgsConstructor;
  * 举报任务投票实体类
  * @author linhaibo
  */
-@ApiModel(value="举报任务投票实体类")
 @Data
 @NoArgsConstructor
 @TableName(value = "report_task_vote")
@@ -34,19 +31,15 @@ public class ReportTaskVote {
 
 
     @TableId(value = "id", type = IdType.AUTO)
-    @ApiModelProperty(value="")
     private Long id;
 
     @TableField(value = "reviewer_id")
-    @ApiModelProperty(value="")
     private Long reviewerId;
 
     @TableField(value = "report_task_id")
-    @ApiModelProperty(value="")
     private Long reportTaskId;
 
     @TableField(value = "vote_result")
-    @ApiModelProperty(value="")
     private Integer voteResult;
 
     public static final String COL_ID = "id";

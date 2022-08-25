@@ -29,7 +29,6 @@ management:
 dubbo:
   version: 1.0.0
   registry:
-    address: nacos://localhost:8848/?username=nacos&password=nacos
-  scan:
-    base-packages:
-      - com.hepo.c2c.social.govern.reward
+    address: spring-cloud://localhost:8848
+  cloud:
+    subscribed-services: c2c-social-govern-reviewer,c2c-social-govern-reward

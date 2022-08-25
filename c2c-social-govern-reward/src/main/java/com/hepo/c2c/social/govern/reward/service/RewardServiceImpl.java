@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hepo.c2c.social.govern.reward.api.service.RewardService;
 import com.hepo.c2c.social.govern.reward.domain.RewardCoin;
 import com.hepo.c2c.social.govern.reward.mapper.RewardMapper;
-import org.apache.dubbo.config.annotation.DubboService;
+import org.apache.dubbo.config.annotation.Service;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author linhaibo
  */
-@DubboService(group = "DEFAULT_GROUP", interfaceClass = RewardService.class, cluster = "failfast")
+@Service(version = "1.0.0", interfaceClass = RewardService.class, cluster = "failfast")
 public class RewardServiceImpl extends ServiceImpl<RewardMapper, RewardCoin> implements RewardService {
 
 
@@ -24,11 +24,11 @@ public class RewardServiceImpl extends ServiceImpl<RewardMapper, RewardCoin> imp
      */
     @Override
     public void giveReward(List<Long> reviewerIds) {
-
-    }
-
-    @Override
-    public String testRPC(String name) {
-        return "Hello, RPC~~~" + name;
+        for (Long reviewerId : reviewerIds) {
+            RewardCoin rewardCoin = new RewardCoin();
+            rewardCoin.setReviewerId(reviewerId);
+            rewardCoin.setCoins(10);
+            baseMapper.insert(rewardCoin);
+        }
     }
 }
