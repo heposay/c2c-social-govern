@@ -9,6 +9,18 @@ spring:
         enabled: true
       username: nacos
       password: nacos
+    sentinel:
+      eager: true  #是否饥饿加载
+      transport:
+        dashboard: 127.0.0.1:7070  #Sentinel 控制台地址
+      datasource:
+        ds:
+          nacos:
+            serverAddr: 127.0.0.1:8848
+            dataId: alibaba-sentinel-datasource-naocs
+            groupId: sentinel
+            ruleType: flow
+
 logging:
   level:
     com:
@@ -32,8 +44,10 @@ dubbo:
   protocols:
     dubbo:
       name: dubbo  #协议名称
-      port: 20880  #协议端口，-1 表示自增端口，从 20880 开始
+      port: 20881  #协议端口，-1 表示自增端口，从 20880 开始
   registry:
     address: spring-cloud://127.0.0.1:8848  # 指定 Dubbo 服务注册中心的地址
   service:
     version: 1.0.0  #版本号
+  metadata-report:
+    address: nacos://127.0.0.1:8848

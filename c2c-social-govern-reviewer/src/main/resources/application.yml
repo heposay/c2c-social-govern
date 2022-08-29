@@ -10,6 +10,10 @@ spring:
         enabled: true
       username: nacos
       password: nacos
+    sentinel:
+      eager: true  #是否饥饿加载
+      transport:
+        dashboard: 127.0.0.1:7070  #Sentinel 控制台地址
   main:
     allow-bean-definition-overriding: true
 logging:
@@ -40,3 +44,5 @@ dubbo:
     address: spring-cloud://127.0.0.1:8848  # 指定 Dubbo 服务注册中心的地址
   service:
     version: 1.0.0  #版本号
+  metadata-report:
+    address: nacos://127.0.0.1:8848

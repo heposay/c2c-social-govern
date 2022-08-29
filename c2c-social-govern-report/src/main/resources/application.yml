@@ -9,6 +9,10 @@ spring:
         enabled: true
       username: nacos
       password: nacos
+    sentinel:
+      eager: true
+      transport:
+        dashboard: 127.0.0.1:7070
 logging:
   level:
     com:

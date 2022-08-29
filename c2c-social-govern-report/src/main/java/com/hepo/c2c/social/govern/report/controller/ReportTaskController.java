@@ -1,5 +1,8 @@
 package com.hepo.c2c.social.govern.report.controller;
 
+import com.alibaba.csp.sentinel.adapter.spring.webflux.callback.DefaultBlockRequestHandler;
+import com.alibaba.csp.sentinel.adapter.spring.webmvc.callback.DefaultBlockExceptionHandler;
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.hepo.c2c.social.govern.report.domain.ReportTask;
 import com.hepo.c2c.social.govern.report.domain.ReportTaskVote;
 import com.hepo.c2c.social.govern.report.service.ReportTaskService;
@@ -49,9 +52,8 @@ public class ReportTaskController {
         reportTask.setVoteResult(ReportTask.VOTE_RESULT_UNKNOWN);
         //在本地添加一个举报任务
         reportTaskService.save(reportTask);
-
         // 调用评审员服务，选择一批评审员
-        List<Long> reviewerIds = reviewerService.selectReviewers(reportTask.getId());
+        List<Long> reviewerIds = selectReviewers(reportTask.getId());
 
         //在本地数据库初始化这批评审员对举报任务的投票状态
         if (reviewerIds != null) {
@@ -62,6 +64,13 @@ public class ReportTaskController {
         System.out.println("模拟发送push消息给评审员.....");
 
         return ResultObject.success("success");
+    }
+
+    @SentinelResource(value = "selectReviewers",
+            blockHandlerClass = DefaultBlockRequestHandler.class,
+            fallbackClass = DefaultBlockExceptionHandler.class)
+    public List<Long> selectReviewers(Long taskId) {
+        return reviewerService.selectReviewers(taskId);
     }
 
     /**
