@@ -5,6 +5,7 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.http.server.HttpServerRequest;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hepo.c2c.social.govern.mall.domain.User;
 import com.hepo.c2c.social.govern.mall.dto.LoginDTO;
@@ -13,12 +14,14 @@ import com.hepo.c2c.social.govern.mall.mapper.UserMapper;
 import com.hepo.c2c.social.govern.mall.service.IUserService;
 import com.hepo.c2c.social.govern.mall.utils.RedisConstants;
 import com.hepo.c2c.social.govern.mall.utils.RegexUtils;
+import com.hepo.c2c.social.govern.mall.utils.UserHolder;
 import com.hepo.c2c.social.govern.vo.ResultObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,7 +63,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         String code = RandomUtil.randomNumbers(6);
 
         //4.保存验证码到redis,30分钟有效期
-        stringRedisTemplate.opsForValue().set(LOGIN_CODE_KEY+ phone, code, LOGIN_CODE_TTL, TimeUnit.MINUTES);
+        stringRedisTemplate.opsForValue().set(LOGIN_CODE_KEY + phone, code, LOGIN_CODE_TTL, TimeUnit.MINUTES);
         //5.发送验证码
         log.info("收到的验证码为:{}, 请快速登录", code);
         return ResultObject.success("验证码为：" + code);
@@ -101,6 +104,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         stringRedisTemplate.expire(LOGIN_USER_KEY + token, LOGIN_USER_TTL, TimeUnit.MINUTES);
         //6.返回token
         return ResultObject.success(token);
+    }
+
+    @Override
+    public ResultObject<String> logout(HttpServletRequest request) {
+        //1.判断当前用户是否登录
+        UserDTO user = UserHolder.getUser();
+        if (Objects.isNull(user)) {
+            return ResultObject.error("当前用户未登录！");
+        }
+        //2.删除redis的用户信息
+        String token = request.getHeader("authorization");
+        String redisKey = LOGIN_USER_KEY + token;
+        stringRedisTemplate.opsForHash().delete(redisKey, BeanUtil.beanToMap(user).keySet().toArray());
+        return ResultObject.success("成功退出登录");
+    }
+
+    @Override
+    public ResultObject<String> sign() {
+
+        return null;
+    }
+
+    @Override
+    public ResultObject<Integer> signCount() {
+        return null;
     }
 
     /**
