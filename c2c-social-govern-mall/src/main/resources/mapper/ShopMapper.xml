@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepo.c2c.social.govern.mall.mapper.ShopMapper">
+  <resultMap id="BaseResultMap" type="com.hepo.c2c.social.govern.mall.domain.Shop">
+    <!--@mbg.generated-->
+    <!--@Table tb_shop-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type_id" jdbcType="BIGINT" property="typeId" />
+    <result column="images" jdbcType="VARCHAR" property="images" />
+    <result column="area" jdbcType="VARCHAR" property="area" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="x" jdbcType="DOUBLE" property="x" />
+    <result column="y" jdbcType="DOUBLE" property="y" />
+    <result column="avg_price" jdbcType="BIGINT" property="avgPrice" />
+    <result column="sold" jdbcType="INTEGER" property="sold" />
+    <result column="comments" jdbcType="INTEGER" property="comments" />
+    <result column="score" jdbcType="INTEGER" property="score" />
+    <result column="open_hours" jdbcType="VARCHAR" property="openHours" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, `name`, type_id, images, area, address, x, y, avg_price, sold, comments, score, 
+    open_hours, create_time, update_time
+  </sql>
+  <update id="updateBatch" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update tb_shop
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="`name` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.name,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="type_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.typeId,jdbcType=BIGINT}
+        </foreach>
+      </trim>
+      <trim prefix="images = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.images,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="area = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.area,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="address = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.address,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="x = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.x,jdbcType=DOUBLE}
+        </foreach>
+      </trim>
+      <trim prefix="y = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.y,jdbcType=DOUBLE}
+        </foreach>
+      </trim>
+      <trim prefix="avg_price = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.avgPrice,jdbcType=BIGINT}
+        </foreach>
+      </trim>
+      <trim prefix="sold = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.sold,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="comments = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.comments,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="score = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.score,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="open_hours = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.openHours,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="create_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.createTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="update_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when id = #{item.id,jdbcType=BIGINT} then #{item.updateTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=BIGINT}
+    </foreach>
+  </update>
+  <update id="updateBatchSelective" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update tb_shop
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="`name` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.name != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.name,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="type_id = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.typeId != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.typeId,jdbcType=BIGINT}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="images = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.images != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.images,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="area = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.area != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.area,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="address = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.address != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.address,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="x = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.x != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.x,jdbcType=DOUBLE}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="y = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.y != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.y,jdbcType=DOUBLE}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="avg_price = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.avgPrice != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.avgPrice,jdbcType=BIGINT}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="sold = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.sold != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.sold,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="comments = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.comments != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.comments,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="score = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.score != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.score,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="open_hours = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.openHours != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.openHours,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="create_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.createTime != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.createTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="update_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.updateTime != null">
+            when id = #{item.id,jdbcType=BIGINT} then #{item.updateTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.id,jdbcType=BIGINT}
+    </foreach>
+  </update>
+  <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into tb_shop
+    (`name`, type_id, images, area, address, x, y, avg_price, sold, comments, score, 
+      open_hours, create_time, update_time)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.name,jdbcType=VARCHAR}, #{item.typeId,jdbcType=BIGINT}, #{item.images,jdbcType=VARCHAR}, 
+        #{item.area,jdbcType=VARCHAR}, #{item.address,jdbcType=VARCHAR}, #{item.x,jdbcType=DOUBLE}, 
+        #{item.y,jdbcType=DOUBLE}, #{item.avgPrice,jdbcType=BIGINT}, #{item.sold,jdbcType=INTEGER}, 
+        #{item.comments,jdbcType=INTEGER}, #{item.score,jdbcType=INTEGER}, #{item.openHours,jdbcType=VARCHAR}, 
+        #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+</mapper>

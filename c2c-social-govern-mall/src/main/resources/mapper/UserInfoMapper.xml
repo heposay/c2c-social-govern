@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepo.c2c.social.govern.mall.mapper.UserInfoMapper">
+  <resultMap id="BaseResultMap" type="com.hepo.c2c.social.govern.mall.domain.UserInfo">
+    <!--@mbg.generated-->
+    <!--@Table tb_user_info-->
+    <id column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="introduce" jdbcType="VARCHAR" property="introduce" />
+    <result column="fans" jdbcType="INTEGER" property="fans" />
+    <result column="followee" jdbcType="INTEGER" property="followee" />
+    <result column="gender" jdbcType="TINYINT" property="gender" />
+    <result column="birthday" jdbcType="DATE" property="birthday" />
+    <result column="credits" jdbcType="INTEGER" property="credits" />
+    <result column="level" jdbcType="TINYINT" property="level" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    user_id, city, introduce, fans, followee, gender, birthday, credits, `level`, create_time, 
+    update_time
+  </sql>
+  <update id="updateBatch" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update tb_user_info
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="city = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when user_id = #{item.userId,jdbcType=BIGINT} then #{item.city,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="introduce = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when user_id = #{item.userId,jdbcType=BIGINT} then #{item.introduce,jdbcType=VARCHAR}
+        </foreach>
+      </trim>
+      <trim prefix="fans = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when user_id = #{item.userId,jdbcType=BIGINT} then #{item.fans,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="followee = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when user_id = #{item.userId,jdbcType=BIGINT} then #{item.followee,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="gender = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when user_id = #{item.userId,jdbcType=BIGINT} then #{item.gender,jdbcType=TINYINT}
+        </foreach>
+      </trim>
+      <trim prefix="birthday = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when user_id = #{item.userId,jdbcType=BIGINT} then #{item.birthday,jdbcType=DATE}
+        </foreach>
+      </trim>
+      <trim prefix="credits = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when user_id = #{item.userId,jdbcType=BIGINT} then #{item.credits,jdbcType=INTEGER}
+        </foreach>
+      </trim>
+      <trim prefix="`level` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when user_id = #{item.userId,jdbcType=BIGINT} then #{item.level,jdbcType=TINYINT}
+        </foreach>
+      </trim>
+      <trim prefix="create_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when user_id = #{item.userId,jdbcType=BIGINT} then #{item.createTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+      <trim prefix="update_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          when user_id = #{item.userId,jdbcType=BIGINT} then #{item.updateTime,jdbcType=TIMESTAMP}
+        </foreach>
+      </trim>
+    </trim>
+    where user_id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.userId,jdbcType=BIGINT}
+    </foreach>
+  </update>
+  <update id="updateBatchSelective" parameterType="java.util.List">
+    <!--@mbg.generated-->
+    update tb_user_info
+    <trim prefix="set" suffixOverrides=",">
+      <trim prefix="city = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.city != null">
+            when user_id = #{item.userId,jdbcType=BIGINT} then #{item.city,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="introduce = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.introduce != null">
+            when user_id = #{item.userId,jdbcType=BIGINT} then #{item.introduce,jdbcType=VARCHAR}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="fans = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.fans != null">
+            when user_id = #{item.userId,jdbcType=BIGINT} then #{item.fans,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="followee = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.followee != null">
+            when user_id = #{item.userId,jdbcType=BIGINT} then #{item.followee,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="gender = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.gender != null">
+            when user_id = #{item.userId,jdbcType=BIGINT} then #{item.gender,jdbcType=TINYINT}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="birthday = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.birthday != null">
+            when user_id = #{item.userId,jdbcType=BIGINT} then #{item.birthday,jdbcType=DATE}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="credits = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.credits != null">
+            when user_id = #{item.userId,jdbcType=BIGINT} then #{item.credits,jdbcType=INTEGER}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="`level` = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.level != null">
+            when user_id = #{item.userId,jdbcType=BIGINT} then #{item.level,jdbcType=TINYINT}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="create_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.createTime != null">
+            when user_id = #{item.userId,jdbcType=BIGINT} then #{item.createTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="update_time = case" suffix="end,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.updateTime != null">
+            when user_id = #{item.userId,jdbcType=BIGINT} then #{item.updateTime,jdbcType=TIMESTAMP}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    where user_id in
+    <foreach close=")" collection="list" item="item" open="(" separator=", ">
+      #{item.userId,jdbcType=BIGINT}
+    </foreach>
+  </update>
+  <insert id="batchInsert" parameterType="map">
+    <!--@mbg.generated-->
+    insert into tb_user_info
+    (user_id, city, introduce, fans, followee, gender, birthday, credits, `level`, create_time, 
+      update_time)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.userId,jdbcType=BIGINT}, #{item.city,jdbcType=VARCHAR}, #{item.introduce,jdbcType=VARCHAR}, 
+        #{item.fans,jdbcType=INTEGER}, #{item.followee,jdbcType=INTEGER}, #{item.gender,jdbcType=TINYINT}, 
+        #{item.birthday,jdbcType=DATE}, #{item.credits,jdbcType=INTEGER}, #{item.level,jdbcType=TINYINT}, 
+        #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateTime,jdbcType=TIMESTAMP})
+    </foreach>
+  </insert>
+</mapper>

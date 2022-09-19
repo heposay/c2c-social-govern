@@ -1,0 +1,38 @@
+server:
+  port: 8086
+spring:
+  cloud:
+    nacos:
+      #服务发现
+      discovery:
+        server-addr: 127.0.0.1:8848
+        enabled: true
+      username: nacos
+      password: nacos
+    sentinel:
+      eager: true
+      transport:
+        dashboard: 127.0.0.1:7070
+logging:
+  level:
+    com:
+      alibaba:
+        cloud:
+          nacos:
+            client: debug
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - '*'
+  endpoint:
+    health:
+      show-details: always
+#dubbo配置
+dubbo:
+  version: 1.0.0
+  registry:
+    address: spring-cloud://localhost:8848
+  cloud:
+    subscribed-services: c2c-social-govern-reviewer
