@@ -25,4 +25,5 @@ public class LoginInterceptor implements HandlerInterceptor {
         //由用户则放行
         return true;
     }
+
 }

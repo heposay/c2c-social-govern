@@ -2,6 +2,7 @@ package com.hepo.c2c.social.govern.mall.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
@@ -17,13 +18,18 @@ import com.hepo.c2c.social.govern.mall.utils.RegexUtils;
 import com.hepo.c2c.social.govern.mall.utils.UserHolder;
 import com.hepo.c2c.social.govern.vo.ResultObject;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.connection.BitFieldSubCommands;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.swing.text.DateFormatter;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -122,14 +128,25 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Override
     public ResultObject<String> sign() {
-
-        return null;
+        //1.获取当前用户
+        UserDTO user = UserHolder.getUser();
+        //2.获取日期
+        LocalDateTime now = LocalDateTime.now();
+        //3.拼接redis key
+        String keySuffix = now.format(DateTimeFormatter.ofPattern(":yyyyMM"));
+        String redisKey = USER_SIGN_KEY + user.getId() + keySuffix;
+        //4.获取今天是本月的第几天
+        int dayOfMonth = now.getDayOfMonth();
+        //5.写入redis SETBIT key offset 1
+        stringRedisTemplate.opsForValue().setBit(redisKey, dayOfMonth - 2, true);
+        return ResultObject.success("签到成功");
     }
 
     @Override
     public ResultObject<Integer> signCount() {
-        return null;
+        return ResultObject.success(0);
     }
+
 
     /**
      * 创建用户并保存
