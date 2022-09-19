@@ -1,11 +1,17 @@
 package com.hepo.c2c.social.govern.mall.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.bean.copier.CopyOptions;
+import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hepo.c2c.social.govern.mall.domain.User;
 import com.hepo.c2c.social.govern.mall.dto.LoginDTO;
+import com.hepo.c2c.social.govern.mall.dto.UserDTO;
 import com.hepo.c2c.social.govern.mall.mapper.UserMapper;
 import com.hepo.c2c.social.govern.mall.service.IUserService;
+import com.hepo.c2c.social.govern.mall.utils.RedisConstants;
 import com.hepo.c2c.social.govern.mall.utils.RegexUtils;
 import com.hepo.c2c.social.govern.vo.ResultObject;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +20,12 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
+import static com.hepo.c2c.social.govern.mall.utils.RedisConstants.*;
 import static com.hepo.c2c.social.govern.mall.utils.SystemConstants.USER_NICK_NAME_PREFIX;
 
 /**
@@ -39,40 +49,58 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if (isPhone) {
             return ResultObject.error("输入的手机号格式有误！");
         }
+        //2.从redis获取key
+        String cacheCode = stringRedisTemplate.opsForValue().get(LOGIN_CODE_KEY + phone);
+        if (StrUtil.isNotBlank(cacheCode)) {
+            log.info("收到的验证码为:{}, 请快速登录", cacheCode);
+            return ResultObject.success("验证码为：" + cacheCode);
+        }
 
-        //2.生成6为随机验证码
+        //3.生成6为随机验证码
         String code = RandomUtil.randomNumbers(6);
 
-        //3.保存验证码到session
-        httpSesion.setAttribute("code", code);
-
-        //4.发送验证码
+        //4.保存验证码到redis,30分钟有效期
+        stringRedisTemplate.opsForValue().set(LOGIN_CODE_KEY+ phone, code, LOGIN_CODE_TTL, TimeUnit.MINUTES);
+        //5.发送验证码
         log.info("收到的验证码为:{}, 请快速登录", code);
         return ResultObject.success("验证码为：" + code);
     }
 
     @Override
-    public ResultObject<User> login(LoginDTO loginDTO, HttpSession httpSession) {
-        //1.校验手机号码和验证码
+    public ResultObject<String> login(LoginDTO loginDTO, HttpSession httpSession) {
+        //1.校验手机号码
         String phone = loginDTO.getPhone();
         if (RegexUtils.isPhoneInvalid(phone)) {
             return ResultObject.error("输入的手机号格式有误！");
         }
-        Object cacheCode = httpSession.getAttribute("code");
+        //2.查询验证码并校验
+        String cacheCode = stringRedisTemplate.opsForValue().get(LOGIN_CODE_KEY + phone);
         String code = loginDTO.getCode();
-        if (cacheCode == null || cacheCode.toString().equals(code)) {
-            return ResultObject.error("验证码错误");
+        if (StrUtil.isBlank(code)) {
+            return ResultObject.error("验证码不能为空！");
         }
-        //2.根据手机号码查询用户
-        User user = query().eq("phone", phone).one();
-        //2.1查不到用户，创建用户并保存到session，最后返回
-        if (Objects.isNull(user)) {
-            user = createUserWithPhone(phone);
+        if (cacheCode == null || !cacheCode.equals(code)) {
+            return ResultObject.error("验证码错误！");
+        }
 
+        //3.根据手机号码查询用户
+        User user = query().eq("phone", phone).one();
+        if (Objects.isNull(user)) {
+            //4.查不到用户，创建用户
+            user = createUserWithPhone(phone);
         }
-        //2.2查到用户，保存到session并返回
-        httpSession.setAttribute("login:user:", user);
-        return ResultObject.success(user);
+        //5.查到用户，保存信息到redis
+        //5.1生成随机的token，作为登录令牌
+        String token = UUID.randomUUID().toString(true);
+        //5.2将user转化成map存储
+        UserDTO userDTO = BeanUtil.copyProperties(user, UserDTO.class);
+        Map<String, Object> userMap = BeanUtil.beanToMap(userDTO);
+        //5.3存储到redis
+        stringRedisTemplate.opsForHash().putAll(LOGIN_USER_KEY + token, userMap);
+        //5.4设置有效期
+        stringRedisTemplate.expire(LOGIN_USER_KEY + token, LOGIN_USER_TTL, TimeUnit.MINUTES);
+        //6.返回token
+        return ResultObject.success(token);
     }
 
     /**

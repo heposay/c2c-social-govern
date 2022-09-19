@@ -29,5 +29,5 @@ public interface IUserService extends IService<User>{
      * @param httpSession
      * @return
      */
-    ResultObject<User> login(LoginDTO loginDTO, HttpSession httpSession);
+    ResultObject<String> login(LoginDTO loginDTO, HttpSession httpSession);
 }

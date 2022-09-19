@@ -49,7 +49,7 @@ public class UserController {
      * @return
      */
     @PostMapping("/login")
-    public ResultObject<User> login(@RequestBody LoginDTO loginDTO, HttpSession httpSession) {
+    public ResultObject<String> login(@RequestBody LoginDTO loginDTO, HttpSession httpSession) {
         return userService.login(loginDTO, httpSession);
     }
 

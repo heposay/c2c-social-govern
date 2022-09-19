@@ -32,6 +32,8 @@ public class ResultObject<T> {
     }
 
     public ResultObject(T data) {
+        this.code = ResultObjectCodeEnum.SUCCESS.code;
+        this.msg = ResultObjectCodeEnum.SUCCESS.msg;
         this.data = data;
     }
 
