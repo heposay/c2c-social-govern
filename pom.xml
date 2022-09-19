@@ -19,6 +19,8 @@
 		<module>c2c-social-govern-reward-api</module>
 		<module>c2c-social-govern-reviewer-api</module>
 		<module>c2c-social-govern-common</module>
+		<module>c2c-social-govern-mall</module>
+		<module>c2c-social-govern-generator</module>
 	</modules>
 
 	<properties>

@@ -54,4 +54,8 @@ public class ResultObject<T> {
     public static <T> ResultObject<T> error(Integer code, String msg) {
         return new ResultObject(code, msg);
     }
+
+    public static <T> ResultObject<T> error(String msg) {
+        return new ResultObject(500, msg);
+    }
 }
