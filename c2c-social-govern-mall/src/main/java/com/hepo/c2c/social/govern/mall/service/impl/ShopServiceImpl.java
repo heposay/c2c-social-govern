@@ -10,6 +10,7 @@ import com.hepo.c2c.social.govern.mall.domain.ShopType;
 import com.hepo.c2c.social.govern.mall.dto.RedisData;
 import com.hepo.c2c.social.govern.mall.mapper.ShopMapper;
 import com.hepo.c2c.social.govern.mall.service.IShopService;
+import com.hepo.c2c.social.govern.mall.utils.CacheClient;
 import com.hepo.c2c.social.govern.vo.ResultObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -17,8 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -42,6 +41,9 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
      * 缓存重建的线程池
      */
     private static final ExecutorService CACHE_REBUILD_POOL = Executors.newFixedThreadPool(10);
+
+    @Resource
+    private CacheClient cacheClient;
 
 
     @Override
@@ -82,7 +84,10 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
         //Shop shop = queryWithMutex(shopId);
 
         //基于逻辑过期解决缓存击穿问题
-        Shop shop = queryWithLogicalExpire(shopId);
+        Shop shop = cacheClient.queryWithLogicalExpire(CACHE_SHOP_KEY, shopId, Shop.class,
+                this::getById, CACHE_SHOP_TTL, TimeUnit.HOURS,
+                LOCK_SHOP_KEY + shopId, 10L);
+       // Shop shop = queryWithLogicalExpire(shopId);
         //返回结果
         return ResultObject.success(shop);
     }
