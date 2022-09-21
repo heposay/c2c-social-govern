@@ -1,5 +1,6 @@
 package com.hepo.c2c.social.govern.mall.service.impl;
 
+import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -61,29 +62,57 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
 
     @Override
     public ResultObject<Shop> queryShopById(Long shopId) {
-        //1.从Redis查询店铺缓存
+        //缓存击穿方案
+        Shop shop = queryWithPassThrough(shopId);
+        //返回结果
+        return ResultObject.success(shop);
+    }
+
+    /**
+     * 缓存击穿解决方案
+     * @param shopId
+     * @return
+     */
+    private Shop queryWithPassThrough(Long shopId) {
+        //1.查询缓存，未命中
         String cacheKey = CACHE_SHOP_KEY + shopId;
         String shopJson = stringRedisTemplate.opsForValue().get(cacheKey);
-        //2.判断是否存在
-        if (StrUtil.isNotBlank(shopJson)) {
-            return ResultObject.success(JSONUtil.toBean(shopJson, Shop.class));
+        if (StrUtil.isBlank(shopJson)) {
+            //2.获取分布式锁
+            Boolean isLock = stringRedisTemplate.opsForValue().setIfAbsent(LOCK_SHOP_KEY + shopId, "1", 10, TimeUnit.SECONDS);
+            Shop shop = null;
+            while (true) {
+                if (BooleanUtil.isTrue(isLock)) {
+                    try {
+                        //3.查询数据库进行缓存重建
+                        shop = getById(shopId);
+                        //4.写入缓存
+                        if (shop == null) {
+                            //4.1如果店铺为空，缓存空对象
+                            stringRedisTemplate.opsForValue().set(cacheKey, "", CACHE_NULL_TTL, TimeUnit.MINUTES);
+                        }else {
+                            //4.2设置店铺缓存
+                            stringRedisTemplate.opsForValue().set(cacheKey, JSONUtil.toJsonStr(shop), CACHE_SHOP_TTL, TimeUnit.DAYS);
+                        }
+                        return shop;
+                    }catch (Exception e) {
+                        log.error("queryWithPassThrough获取分布式锁失败,{}", e);
+                        e.printStackTrace();
+                    }finally {
+                        //5.释放锁
+                        stringRedisTemplate.delete(LOCK_SHOP_KEY + shopId);
+                    }
+                }else {
+                    try {
+                        Thread.sleep(50);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
         }
-        //3.判断是否空值
-        if (shopJson != null) {
-            return ResultObject.error("店铺信息不存在!");
-        }
-        //4.不存在，根据id查询数据库
-        Shop shop = getById(shopId);
-
-        //5.如果店铺不存在，缓存空对象到redis，防止缓存穿透
-        if (shop == null) {
-            stringRedisTemplate.opsForValue().set(cacheKey, "", CACHE_NULL_TTL, TimeUnit.MINUTES);
-            return ResultObject.error("店铺不存在！");
-        }
-        //6.设置redis缓存
-        stringRedisTemplate.opsForValue().set(cacheKey, JSONUtil.toJsonStr(shop), CACHE_SHOP_TTL, TimeUnit.DAYS);
-        //6.返回结果
-        return ResultObject.success(shop);
+        //6.如果不为空，直接返回结果
+        return JSONUtil.toBean(shopJson, Shop.class);
     }
 
     @Override

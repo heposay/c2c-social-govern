@@ -1,22 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/c2c-social-govern-common" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/c2c-social-govern-common/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/c2c-social-govern-common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/c2c-social-govern-generator" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/c2c-social-govern-generator/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/c2c-social-govern-generator/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/c2c-social-govern-mall" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/c2c-social-govern-mall/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/c2c-social-govern-report" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/c2c-social-govern-report/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/c2c-social-govern-report/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/c2c-social-govern-reviewer" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/c2c-social-govern-reviewer-api" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/c2c-social-govern-reviewer-api/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/c2c-social-govern-reviewer-api/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/c2c-social-govern-reviewer/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/c2c-social-govern-reviewer/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/c2c-social-govern-reward" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/c2c-social-govern-reward-api" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/c2c-social-govern-reward-api/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/c2c-social-govern-reward-api/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/c2c-social-govern-reward/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/c2c-social-govern-reward/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
   </component>
 </project>
