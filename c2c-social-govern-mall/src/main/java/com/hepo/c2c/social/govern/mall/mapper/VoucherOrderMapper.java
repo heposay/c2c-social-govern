@@ -1,14 +1,15 @@
 package com.hepo.c2c.social.govern.mall.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.hepo.c2c.social.govern.mall.domain.Blog;
+import com.hepo.c2c.social.govern.mall.domain.VoucherOrder;
 
 /**
- * Description:
+ *
+ * Description: 
  * Project:  c2c-social-govern
  * CreateDate: Created in 2022-09-21 19:21
  *
- * @author linhaibo
+ * @author  linhaibo
  */
-public interface BlogMapper extends BaseMapper<Blog> {
+public interface VoucherOrderMapper extends BaseMapper<VoucherOrder> {
 }

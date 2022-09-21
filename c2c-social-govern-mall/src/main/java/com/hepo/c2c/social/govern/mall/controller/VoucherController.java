@@ -3,14 +3,14 @@ import org.springframework.web.bind.annotation.*;
 
 
 /**
-* (Blog)表控制层
+* (Voucher)表控制层
 *
 * @author linhaibo
 * 
 */
 @RestController
-@RequestMapping("/blog")
-public class BlogController {
+@RequestMapping("/voucher")
+public class VoucherController {
 
 
 

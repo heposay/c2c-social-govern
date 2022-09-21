@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepo.c2c.social.govern.mall.mapper.VoucherMapper">
+  <resultMap id="BaseResultMap" type="com.hepo.c2c.social.govern.mall.domain.Voucher">
+    <!--@mbg.generated-->
+    <!--@Table tb_voucher-->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="sub_title" jdbcType="VARCHAR" property="subTitle" />
+    <result column="rules" jdbcType="VARCHAR" property="rules" />
+    <result column="pay_value" jdbcType="BIGINT" property="payValue" />
+    <result column="actual_value" jdbcType="BIGINT" property="actualValue" />
+    <result column="type" jdbcType="TINYINT" property="type" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, shop_id, title, sub_title, rules, pay_value, actual_value, `type`, `status`, 
+    create_time, update_time
+  </sql>
+</mapper>

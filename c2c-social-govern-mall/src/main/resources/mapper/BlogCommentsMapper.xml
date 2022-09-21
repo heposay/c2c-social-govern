@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hepo.c2c.social.govern.mall.mapper.BlogMapper">
-  <resultMap id="BaseResultMap" type="com.hepo.c2c.social.govern.mall.domain.Blog">
+<mapper namespace="com.hepo.c2c.social.govern.mall.mapper.BlogCommentsMapper">
+  <resultMap id="BaseResultMap" type="com.hepo.c2c.social.govern.mall.domain.BlogComments">
     <!--@mbg.generated-->
-    <!--@Table tb_blog-->
+    <!--@Table tb_blog_comments-->
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="shop_id" jdbcType="BIGINT" property="shopId" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
-    <result column="title" jdbcType="VARCHAR" property="title" />
-    <result column="images" jdbcType="VARCHAR" property="images" />
+    <result column="blog_id" jdbcType="BIGINT" property="blogId" />
+    <result column="parent_id" jdbcType="BIGINT" property="parentId" />
+    <result column="answer_id" jdbcType="BIGINT" property="answerId" />
     <result column="content" jdbcType="VARCHAR" property="content" />
     <result column="liked" jdbcType="INTEGER" property="liked" />
-    <result column="comments" jdbcType="INTEGER" property="comments" />
+    <result column="status" jdbcType="TINYINT" property="status" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, shop_id, user_id, title, images, content, liked, comments, create_time, update_time
+    id, user_id, blog_id, parent_id, answer_id, content, liked, `status`, create_time, 
+    update_time
   </sql>
 </mapper>

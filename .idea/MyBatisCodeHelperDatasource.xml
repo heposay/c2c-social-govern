@@ -24,7 +24,7 @@
     <option name="projectProfile">
       <ProjectProfile>
         <option name="addSerializeUid" value="true" />
-        <option name="batchInsert" value="true" />
+        <option name="baseClassSearchXml" value="true" />
         <option name="controllerFolderPath" value="$PROJECT_DIR$/c2c-social-govern-mall/src/main/java" />
         <option name="controllerTemplateString" value="&#10;#* @vtlvariable name=&quot;tableName&quot; type=&quot;java.lang.String&quot; *#&#10;#* @vtlvariable name=&quot;entityPackageName&quot; type=&quot;java.lang.String&quot; *#&#10;#* @vtlvariable name=&quot;entityClassName&quot; type=&quot;java.lang.String&quot; *#&#10;#* @vtlvariable name=&quot;servicePackageName&quot; type=&quot;java.lang.String&quot; *#&#10;#* @vtlvariable name=&quot;serviceInterfacePackage&quot; type=&quot;java.lang.String&quot; *#&#10;#* @vtlvariable name=&quot;serviceClassName&quot; type=&quot;java.lang.String&quot; *#&#10;#* @vtlvariable name=&quot;serviceInterfaceClassName&quot; type=&quot;java.lang.String&quot; *#&#10;#* @vtlvariable name=&quot;mapperPackageName&quot; type=&quot;java.lang.String&quot; *#&#10;#* @vtlvariable name=&quot;mapperClassName&quot; type=&quot;java.lang.String&quot; *#&#10;#* @vtlvariable name=&quot;controllerPackage&quot; type=&quot;java.lang.String&quot; *#&#10;#* @vtlvariable name=&quot;tableRemark&quot; type=&quot;java.lang.String&quot; *#&#10;package $!{controllerPackage};&#10;import org.springframework.web.bind.annotation.*;&#10;&#10;&#10;/**&#10;* $!{info.tableRemarks}($!{entityClassName})表控制层&#10;*&#10;* @author linhaibo&#10;* &#10;*/&#10;@RestController&#10;@RequestMapping(&quot;/$!{tableName}&quot;)&#10;public class $!{entityClassName}Controller {&#10;&#10;&#10;&#10;}" />
         <option name="database" value="MySql" />
@@ -196,13 +196,46 @@
             <entry key="c2c_mall:tb_blog">
               <value>
                 <TableGenerateConfig>
-                  <option name="batchInsert" value="true" />
                   <option name="generatedKey" value="id" />
                   <option name="javaModelName" value="Blog" />
                   <option name="moduleName" value="c2c-social-govern-mall" />
-                  <option name="sequenceColumn" value="" />
-                  <option name="sequenceId" value="" />
-                  <option name="updateBatch" value="true" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="c2c_mall:tb_blog_comments">
+              <value>
+                <TableGenerateConfig>
+                  <option name="columnOverrideList">
+                    <list>
+                      <MyColumnOverride>
+                        <option name="columnName" value="status" />
+                        <option name="javaType" value="java.lang.Integer" />
+                      </MyColumnOverride>
+                    </list>
+                  </option>
+                  <option name="generatedKey" value="id" />
+                  <option name="javaModelName" value="BlogComments" />
+                  <option name="moduleName" value="c2c-social-govern-mall" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="c2c_mall:tb_follow">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="id" />
+                  <option name="javaModelName" value="Follow" />
+                  <option name="moduleName" value="c2c-social-govern-mall" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="c2c_mall:tb_seckill_voucher">
+              <value>
+                <TableGenerateConfig>
+                  <option name="javaModelName" value="SeckillVoucher" />
+                  <option name="moduleName" value="c2c-social-govern-mall" />
                   <option name="useActualColumnName" value="false" />
                 </TableGenerateConfig>
               </value>
@@ -279,10 +312,51 @@
                 </TableGenerateConfig>
               </value>
             </entry>
+            <entry key="c2c_mall:tb_voucher">
+              <value>
+                <TableGenerateConfig>
+                  <option name="columnOverrideList">
+                    <list>
+                      <MyColumnOverride>
+                        <option name="columnName" value="type" />
+                        <option name="javaType" value="java.lang.Integer" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="status" />
+                        <option name="javaType" value="java.lang.Integer" />
+                      </MyColumnOverride>
+                    </list>
+                  </option>
+                  <option name="generatedKey" value="id" />
+                  <option name="javaModelName" value="Voucher" />
+                  <option name="moduleName" value="c2c-social-govern-mall" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="c2c_mall:tb_voucher_order">
+              <value>
+                <TableGenerateConfig>
+                  <option name="columnOverrideList">
+                    <list>
+                      <MyColumnOverride>
+                        <option name="columnName" value="pay_type" />
+                        <option name="javaType" value="java.lang.Integer" />
+                      </MyColumnOverride>
+                      <MyColumnOverride>
+                        <option name="columnName" value="status" />
+                        <option name="javaType" value="java.lang.Integer" />
+                      </MyColumnOverride>
+                    </list>
+                  </option>
+                  <option name="javaModelName" value="VoucherOrder" />
+                  <option name="moduleName" value="c2c-social-govern-mall" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
           </map>
         </option>
-        <option name="updateBatch" value="true" />
-        <option name="updateBatchSelective" value="true" />
         <option name="useSwagger" value="true" />
         <option name="userMybatisPlus" value="true" />
         <option name="xmlMapperPackage" value="mapper" />

@@ -5,6 +5,15 @@ import com.hepo.c2c.social.govern.mall.domain.Blog;
 import com.hepo.c2c.social.govern.mall.mapper.BlogMapper;
 import com.hepo.c2c.social.govern.mall.service.IBlogService;
 import org.springframework.stereotype.Service;
+/**
+ *
+ * Description:  探店笔记实现类
+ * Project:  c2c-social-govern
+ * CreateDate: Created in 2022-09-21 19:21
+ *
+ * @author  linhaibo
+ */
 @Service
 public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements IBlogService {
 }
+

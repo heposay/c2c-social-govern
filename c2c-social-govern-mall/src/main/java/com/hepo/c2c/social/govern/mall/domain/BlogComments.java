@@ -12,104 +12,105 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Description:
+ *
+ * Description: 
  * Project:  c2c-social-govern
  * CreateDate: Created in 2022-09-21 19:21
  *
- * @author linhaibo
+ * @author  linhaibo
  */
-@ApiModel(value = "tb_blog")
+@ApiModel(value="tb_blog_comments")
 @Data
 @NoArgsConstructor
-@TableName(value = "tb_blog")
-public class Blog implements Serializable {
+@TableName(value = "tb_blog_comments")
+public class BlogComments implements Serializable {
     /**
      * 主键
      */
     @TableId(value = "id", type = IdType.AUTO)
-    @ApiModelProperty(value = "主键")
+    @ApiModelProperty(value="主键")
     private Long id;
-
-    /**
-     * 商户id
-     */
-    @TableField(value = "shop_id")
-    @ApiModelProperty(value = "商户id")
-    private Long shopId;
 
     /**
      * 用户id
      */
     @TableField(value = "user_id")
-    @ApiModelProperty(value = "用户id")
+    @ApiModelProperty(value="用户id")
     private Long userId;
 
     /**
-     * 标题
+     * 探店id
      */
-    @TableField(value = "title")
-    @ApiModelProperty(value = "标题")
-    private String title;
+    @TableField(value = "blog_id")
+    @ApiModelProperty(value="探店id")
+    private Long blogId;
 
     /**
-     * 探店的照片，最多9张，多张以","隔开
+     * 关联的1级评论id，如果是一级评论，则值为0
      */
-    @TableField(value = "images")
-    @ApiModelProperty(value = "探店的照片，最多9张，多张以','隔开")
-    private String images;
+    @TableField(value = "parent_id")
+    @ApiModelProperty(value="关联的1级评论id，如果是一级评论，则值为0")
+    private Long parentId;
 
     /**
-     * 探店的文字描述
+     * 回复的评论id
+     */
+    @TableField(value = "answer_id")
+    @ApiModelProperty(value="回复的评论id")
+    private Long answerId;
+
+    /**
+     * 回复的内容
      */
     @TableField(value = "content")
-    @ApiModelProperty(value = "探店的文字描述")
+    @ApiModelProperty(value="回复的内容")
     private String content;
 
     /**
-     * 点赞数量
+     * 点赞数
      */
     @TableField(value = "liked")
-    @ApiModelProperty(value = "点赞数量")
+    @ApiModelProperty(value="点赞数")
     private Integer liked;
 
     /**
-     * 评论数量
+     * 状态，0：正常，1：被举报，2：禁止查看
      */
-    @TableField(value = "comments")
-    @ApiModelProperty(value = "评论数量")
-    private Integer comments;
+    @TableField(value = "`status`")
+    @ApiModelProperty(value="状态，0：正常，1：被举报，2：禁止查看")
+    private Integer status;
 
     /**
      * 创建时间
      */
     @TableField(value = "create_time")
-    @ApiModelProperty(value = "创建时间")
+    @ApiModelProperty(value="创建时间")
     private LocalDateTime createTime;
 
     /**
      * 更新时间
      */
     @TableField(value = "update_time")
-    @ApiModelProperty(value = "更新时间")
+    @ApiModelProperty(value="更新时间")
     private LocalDateTime updateTime;
 
     private static final long serialVersionUID = 1L;
 
     public static final String COL_ID = "id";
 
-    public static final String COL_SHOP_ID = "shop_id";
-
     public static final String COL_USER_ID = "user_id";
 
-    public static final String COL_TITLE = "title";
+    public static final String COL_BLOG_ID = "blog_id";
 
-    public static final String COL_IMAGES = "images";
+    public static final String COL_PARENT_ID = "parent_id";
+
+    public static final String COL_ANSWER_ID = "answer_id";
 
     public static final String COL_CONTENT = "content";
 
     public static final String COL_LIKED = "liked";
 
-    public static final String COL_COMMENTS = "comments";
+    public static final String COL_STATUS = "status";
 
     public static final String COL_CREATE_TIME = "create_time";
 
