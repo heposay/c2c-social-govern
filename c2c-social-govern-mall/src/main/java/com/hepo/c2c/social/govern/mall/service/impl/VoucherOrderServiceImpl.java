@@ -1,7 +1,6 @@
 package com.hepo.c2c.social.govern.mall.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.hepo.c2c.social.govern.mall.domain.SeckillVoucher;
 import com.hepo.c2c.social.govern.mall.domain.VoucherOrder;
 import com.hepo.c2c.social.govern.mall.dto.UserDTO;
 import com.hepo.c2c.social.govern.mall.mapper.VoucherOrderMapper;
@@ -12,11 +11,14 @@ import com.hepo.c2c.social.govern.mall.utils.UserHolder;
 import com.hepo.c2c.social.govern.vo.ResultObject;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
+import java.util.Collections;
 
 import static com.hepo.c2c.social.govern.mall.utils.OrderStatusConstants.UNPAY;
 
@@ -39,27 +41,38 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
     @Resource
     private RedissonClient redissonClient;
 
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+
+    private static final DefaultRedisScript<Long> SECKILL_SCRIPT;
+
+    static {
+        SECKILL_SCRIPT = new DefaultRedisScript<>();
+        SECKILL_SCRIPT.setLocation(new ClassPathResource("seckill.lua"));
+        SECKILL_SCRIPT.setResultType(Long.class);
+    }
+
     @Override
     public ResultObject<String> seckillVoucher(Long voucherId) {
-        //1.查询优惠券信息
-        SeckillVoucher seckillVoucher = seckillVoucherService.getById(voucherId);
+        //1.获取用户信息
+        String userId = UserHolder.getUser().getId();
+        //2.执行lua秒杀脚本
+        Long result = stringRedisTemplate.execute(SECKILL_SCRIPT,
+                Collections.emptyList(),// KEYS[]
+                voucherId.toString(), userId //ARGV[]
+        );
+        int r = result.intValue();
+        //3.判断是否为0
+        if (r != 0) {
+            //3.1.不为0代表没有购买资格
+            return ResultObject.error(r == 1 ? "库存不足" : "不能重复下单");
+        }
+        //3.2.为0代表有购买资格
+        long orderId = redisIdWorker.nextId("order");
+        // TODO 保存阻塞队列
 
-        //2.判断秒杀是否开始
-        LocalDateTime now = LocalDateTime.now();
-        if (seckillVoucher.getBeginTime().isAfter(now)) {
-            return ResultObject.error("活动尚未开始！");
-        }
-        if (seckillVoucher.getEndTime().isBefore(now)) {
-            return ResultObject.error("活动已经结束！");
-        }
-        //3.判断库存是否充足
-        Integer stock = seckillVoucher.getStock();
-        if (stock < 1) {
-            //库存不足
-            return ResultObject.error("库存不足！");
-        }
-
-        return createVoucherOrder(voucherId);
+        //5.返回订单id
+        return ResultObject.success("秒杀成功！订单id为：" + orderId);
     }
 
     /**
@@ -112,7 +125,7 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
         }
     }
 
-      //单机版加锁
+    //单机版加锁
 //    @Transactional
 //    public ResultObject<String> createVoucherOrder(Long voucherId) {
 //        UserDTO user = UserHolder.getUser();
