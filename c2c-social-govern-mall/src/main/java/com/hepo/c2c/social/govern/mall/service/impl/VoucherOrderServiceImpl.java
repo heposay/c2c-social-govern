@@ -8,10 +8,10 @@ import com.hepo.c2c.social.govern.mall.mapper.VoucherOrderMapper;
 import com.hepo.c2c.social.govern.mall.service.ISeckillVoucherService;
 import com.hepo.c2c.social.govern.mall.service.IVoucherOrderService;
 import com.hepo.c2c.social.govern.mall.utils.RedisIdWorker;
-import com.hepo.c2c.social.govern.mall.utils.SimpleRedisLock;
 import com.hepo.c2c.social.govern.mall.utils.UserHolder;
 import com.hepo.c2c.social.govern.vo.ResultObject;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +37,7 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
     private RedisIdWorker redisIdWorker;
 
     @Resource
-    private StringRedisTemplate stringRedisTemplate;
+    private RedissonClient redissonClient;
 
     @Override
     public ResultObject<String> seckillVoucher(Long voucherId) {
@@ -71,9 +71,9 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
     public ResultObject<String> createVoucherOrder(Long voucherId) {
         UserDTO user = UserHolder.getUser();
         //创建锁对象
-        SimpleRedisLock lock = new SimpleRedisLock("order:" + user.getId(), stringRedisTemplate);
+        RLock lock = redissonClient.getLock("lock:order:" + user.getId());
 
-        boolean isLock = lock.tryLock(10);
+        boolean isLock = lock.tryLock();
         if (!isLock) {
             return ResultObject.error("获取锁失败！");
         }
@@ -108,7 +108,7 @@ public class VoucherOrderServiceImpl extends ServiceImpl<VoucherOrderMapper, Vou
             save(voucherOrder);
             return ResultObject.success("秒杀成功！订单id为：" + orderId);
         } finally {
-            lock.unLock();
+            lock.unlock();
         }
     }
 
