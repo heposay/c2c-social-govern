@@ -2,7 +2,9 @@ package com.hepo.c2c.social.govern.mall.service;
 
 import com.hepo.c2c.social.govern.mall.domain.VoucherOrder;
 import com.baomidou.mybatisplus.extension.service.IService;
-    /**
+import com.hepo.c2c.social.govern.vo.ResultObject;
+
+/**
  *
  * Description: 优惠券订单接口
  * Project:  c2c-social-govern
@@ -12,5 +14,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IVoucherOrderService extends IService<VoucherOrder>{
 
-
-}
+        ResultObject<String> seckillVoucher(Long voucherId);
+    }

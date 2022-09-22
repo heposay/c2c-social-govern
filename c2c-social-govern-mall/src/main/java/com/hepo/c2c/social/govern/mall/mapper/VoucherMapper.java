@@ -3,6 +3,8 @@ package com.hepo.c2c.social.govern.mall.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.hepo.c2c.social.govern.mall.domain.Voucher;
 
+import java.util.List;
+
 /**
  *
  * Description: 
@@ -12,4 +14,5 @@ import com.hepo.c2c.social.govern.mall.domain.Voucher;
  * @author  linhaibo
  */
 public interface VoucherMapper extends BaseMapper<Voucher> {
+    List<Voucher> queryVoucherOfShop(Long shopId);
 }
