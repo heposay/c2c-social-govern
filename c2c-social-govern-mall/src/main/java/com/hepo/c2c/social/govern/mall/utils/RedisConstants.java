@@ -36,4 +36,11 @@ public class RedisConstants {
 
     public static final String SECKILL_STOCK_KEY = "seckill:stock:";
 
+    public static final String CREATE_ORDER_KEY = "create:order:";
+
+    public static final Long CREATE_ORDER_TTL = 1L;
+
+    public static final String LOCK_ORDER_KEY = "lock:order:";
+
+
 }

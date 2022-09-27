@@ -13,6 +13,26 @@ spring:
       eager: true
       transport:
         dashboard: 127.0.0.1:7070
+    #RocketMq配置
+    stream:
+      function:
+        definition: consumer;
+      rocketmq:
+        binder:
+          name-server: localhost:9876
+        bindings:
+          producer-out-0:
+            producer:
+              group: create-seckill-order-output
+              transactionListener: createVoucherOrderTransactionListener
+              producerType: Trans
+      bindings:
+        producer-out-0:
+          destination: create-seckill-order-tx-topic
+        consumer-in-0:
+          destination: create-seckill-order-tx-topic
+          group: seckill-order-tx-group
+
 logging:
   level:
     com:

@@ -137,6 +137,7 @@
             <scope>test</scope>
         </dependency>
 
+
         <!--整合Knife4j配置，类似于swagger-->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
@@ -145,6 +146,10 @@
             <!--在引用时请在maven中央仓库搜索3.X最新版本号-->
         </dependency>
 
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-stream-rocketmq</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
