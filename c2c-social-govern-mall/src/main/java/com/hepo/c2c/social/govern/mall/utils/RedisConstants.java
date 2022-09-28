@@ -42,5 +42,8 @@ public class RedisConstants {
 
     public static final String LOCK_ORDER_KEY = "lock:order:";
 
+    public static final String BLOG_LIKE_KEY = "blog:like:";
 
+    public static final String BLOG_FEED_KEY = "blog:feed:";
+    public static final String FOLLOWS_USER_KEY = "follows:user:";
 }

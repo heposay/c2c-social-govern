@@ -93,6 +93,24 @@ public class Blog implements Serializable {
     @ApiModelProperty(value = "更新时间")
     private LocalDateTime updateTime;
 
+    /**
+     * 用户姓名
+     */
+    @TableField(exist = false)
+    private String nickname;
+
+    /**
+     * 用户头像
+     */
+    @TableField(exist = false)
+    private String icon;
+
+    /**
+     * 是否被点赞
+     */
+    @TableField(exist = false)
+    private Boolean isLike;
+
     private static final long serialVersionUID = 1L;
 
     public static final String COL_ID = "id";
