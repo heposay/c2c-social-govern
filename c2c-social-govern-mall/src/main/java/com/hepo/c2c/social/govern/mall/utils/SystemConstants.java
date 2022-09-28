@@ -12,4 +12,6 @@ public class SystemConstants {
     public static final int GENDER_MALE = 1;
     public static final int GENDER_FEMALE = 2;
 
+    public static final String FILE_UPLOAD_DIR = "/Users/linhaibo/data/c2c_mall";
+
 }
