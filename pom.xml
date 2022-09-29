@@ -138,6 +138,30 @@
 				<groupId>org.springframework.cloud</groupId>
 				<version>3.0.14.RELEASE</version>
 			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-redis</artifactId>
+				<version>2.6.2</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-commons</artifactId>
+				<version>2.3.9.RELEASE</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.lettuce</groupId>
+				<artifactId>lettuce-core</artifactId>
+				<version>6.1.6.RELEASE</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.redisson</groupId>
+				<artifactId>redisson</artifactId>
+				<version>3.13.6</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

@@ -5,6 +5,8 @@ import com.hepo.c2c.social.govern.mall.domain.Shop;
 import com.hepo.c2c.social.govern.mall.domain.ShopType;
 import com.hepo.c2c.social.govern.vo.ResultObject;
 
+import java.util.List;
+
 /**
  * Shop Service层接口
  *
@@ -20,5 +22,5 @@ public interface IShopService extends IService<Shop>{
 
     ResultObject<String> deleteShop(Long shopId);
 
-    ResultObject<ShopType> queryShopByType(Integer typeId, Integer current, Double x, Double y);
+    ResultObject<List<Shop>> queryShopByType(Integer typeId, Integer current, Double x, Double y);
 }

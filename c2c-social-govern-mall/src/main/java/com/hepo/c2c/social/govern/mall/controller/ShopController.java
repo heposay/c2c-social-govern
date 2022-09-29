@@ -10,6 +10,8 @@ import com.hepo.c2c.social.govern.vo.ResultObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 /**
  * (Shop)表控制层
@@ -75,7 +77,10 @@ public class ShopController {
      * @return 商铺信息
      */
     @GetMapping("/of/type")
-    public ResultObject<ShopType> queryShopByType(@RequestParam("typeId") Integer typeId, @RequestParam(value = "current", defaultValue = "1") Integer current, @RequestParam("x") Double x, @RequestParam("y") Double y) {
+    public ResultObject<List<Shop>> queryShopByType(@RequestParam("typeId") Integer typeId,
+                                                    @RequestParam(value = "current", defaultValue = "1") Integer current,
+                                                    @RequestParam(value = "x",required = false) Double x,
+                                                    @RequestParam(value = "y",required = false) Double y) {
         return shopService.queryShopByType(typeId, current, x, y);
     }
 

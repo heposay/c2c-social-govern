@@ -121,6 +121,10 @@ public class Shop implements Serializable {
     @ApiModelProperty(value="更新时间")
     private LocalDateTime updateTime;
 
+
+    @TableField(exist = false)
+    private Double distance;
+
     private static final long serialVersionUID = 1L;
 
     public static final String COL_ID = "id";

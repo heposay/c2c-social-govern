@@ -1,6 +1,5 @@
 package com.hepo.c2c.social.govern.mall.controller;
 
-import cn.hutool.http.server.HttpServerRequest;
 import com.hepo.c2c.social.govern.mall.domain.UserInfo;
 import com.hepo.c2c.social.govern.mall.dto.LoginDTO;
 import com.hepo.c2c.social.govern.mall.dto.UserDTO;
@@ -13,10 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
-import java.time.LocalDateTime;
-
-import static com.hepo.c2c.social.govern.mall.utils.SystemConstants.GENDER_MALE;
 
 /**
  * User表控制层
@@ -95,6 +90,7 @@ public class UserController {
 
     /**
      * 用户签到
+     *
      * @return
      */
     @PostMapping("/sign")
@@ -105,9 +101,10 @@ public class UserController {
 
     /**
      * 签到统计
+     *
      * @return
      */
-    @PostMapping("/sign/count")
+    @GetMapping("/sign/count")
     public ResultObject<Integer> signCount() {
         return userService.signCount();
     }

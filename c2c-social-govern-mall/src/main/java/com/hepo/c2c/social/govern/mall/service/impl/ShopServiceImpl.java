@@ -4,26 +4,33 @@ import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hepo.c2c.social.govern.mall.domain.Shop;
-import com.hepo.c2c.social.govern.mall.domain.ShopType;
 import com.hepo.c2c.social.govern.mall.dto.RedisData;
 import com.hepo.c2c.social.govern.mall.mapper.ShopMapper;
 import com.hepo.c2c.social.govern.mall.service.IShopService;
 import com.hepo.c2c.social.govern.mall.utils.CacheClient;
 import com.hepo.c2c.social.govern.vo.ResultObject;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.GeoResult;
+import org.springframework.data.geo.GeoResults;
+import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.domain.geo.GeoReference;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import static com.hepo.c2c.social.govern.mall.utils.RedisConstants.*;
+import static com.hepo.c2c.social.govern.mall.utils.SystemConstants.MAX_PAGE_SIZE;
 
 /**
  * 店铺管理实现类
@@ -87,7 +94,7 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
         Shop shop = cacheClient.queryWithLogicalExpire(CACHE_SHOP_KEY, shopId, Shop.class,
                 this::getById, CACHE_SHOP_TTL, TimeUnit.HOURS,
                 LOCK_SHOP_KEY + shopId, 10L);
-       // Shop shop = queryWithLogicalExpire(shopId);
+        // Shop shop = queryWithLogicalExpire(shopId);
         //返回结果
         return ResultObject.success(shop);
     }
@@ -114,7 +121,7 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
         LocalDateTime expireTime = shopData.getExpireTime();
         if (expireTime.isAfter(LocalDateTime.now())) {
             //2.1.缓存未过期，直接返回店铺信息
-            return JSONUtil.toBean(JSONUtil.toJsonStr((JSONObject)shopData.getData()), Shop.class);
+            return JSONUtil.toBean(JSONUtil.toJsonStr((JSONObject) shopData.getData()), Shop.class);
         }
 
         //2.2过期，尝试获取互斥锁
@@ -126,7 +133,7 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
             //再次判断缓存是否过期，Double check
             if (expireTime.isAfter(LocalDateTime.now())) {
                 //2.1.缓存未过期，直接返回店铺信息
-                return JSONUtil.toBean(JSONUtil.toJsonStr((JSONObject)shopData.getData()), Shop.class);
+                return JSONUtil.toBean(JSONUtil.toJsonStr((JSONObject) shopData.getData()), Shop.class);
             }
             //3.2获取到锁，开启独立线程
             CACHE_REBUILD_POOL.submit(() -> {
@@ -136,7 +143,7 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
 
                 } catch (Exception e) {
                     e.printStackTrace();
-                }finally {
+                } finally {
                     //释放锁
                     unLock(LOCK_SHOP_KEY + shopId);
                 }
@@ -151,9 +158,9 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
     }
 
 
-
     /**
      * 封装redisdata数据，然后保存到redis
+     *
      * @param shopId
      * @param expireSecond
      */
@@ -256,10 +263,53 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, Shop> implements IS
     }
 
     @Override
-    public ResultObject<ShopType> queryShopByType(Integer typeId, Integer current, Double x, Double y) {
-        return null;
-    }
+    public ResultObject<List<Shop>> queryShopByType(Integer typeId, Integer current, Double x, Double y) {
+        //1.判断是否根据坐标查询
+        if (x == null || y == null) {
+            //不需要坐标查询
+            Page<Shop> page = query().eq("type_id", typeId).page(new Page<>(current, MAX_PAGE_SIZE));
+            return ResultObject.success(page.getRecords());
+        }
+        //2.计算分页参数
+        int from = (current - 1) * MAX_PAGE_SIZE;
+        int end = current * MAX_PAGE_SIZE;
 
+        //3.查询redis，按照距离排序，分页
+        String redisKey = SHOP_GEO_KEY + typeId;
+        // GEOSEARCH key BYLONLAT x y BYRADIUS 10 WITHDISTANCE
+        GeoResults<RedisGeoCommands.GeoLocation<String>> resultList = stringRedisTemplate.opsForGeo()
+                .search(
+                        redisKey,
+                        GeoReference.fromCoordinate(x, y),
+                        new Distance(5000),
+                        RedisGeoCommands.GeoSearchCommandArgs.newGeoSearchArgs().includeDistance().limit(end)
+                );
+        //4.解析出id
+        if (resultList == null || resultList.getContent().isEmpty()) {
+            return ResultObject.success(Collections.emptyList());
+        }
+        List<GeoResult<RedisGeoCommands.GeoLocation<String>>> list = resultList.getContent();
+        if (list.size() < from) {
+            //没有下一页了，结束
+            return ResultObject.success(Collections.emptyList());
+        }
+        //4.1.截取 from ~ end的部分
+        List<Long> ids = new ArrayList<>();
+        Map<String, Distance> distanceMap = new HashMap<>(list.size());
+        list.stream().skip(from).forEach(result -> {
+            //4.1获取店铺id
+            String shopIdStr = result.getContent().getName();
+            ids.add(Long.valueOf(shopIdStr));
+            //4.3获取店铺距离
+            Distance distance = result.getDistance();
+            distanceMap.put(shopIdStr, distance);
+        });
+        //5.查询数据库
+        String idStr = StrUtil.join(",", ids);
+        List<Shop> shopList = query().in("id", ids).last("ORDER BY FIELD(id, " + idStr + ")").list();
+        shopList.forEach(shop-> shop.setDistance(distanceMap.get(shop.getId().toString()).getValue()));
+        return ResultObject.success(shopList);
+    }
 
 
     private boolean tryLock(String key, long expireTime) {

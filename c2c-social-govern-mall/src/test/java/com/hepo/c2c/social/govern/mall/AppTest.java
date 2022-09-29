@@ -3,6 +3,7 @@ package com.hepo.c2c.social.govern.mall;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.lang.UUID;
+import com.hepo.c2c.social.govern.mall.domain.Shop;
 import com.hepo.c2c.social.govern.mall.domain.User;
 import com.hepo.c2c.social.govern.mall.domain.UserInfo;
 import com.hepo.c2c.social.govern.mall.dto.UserDTO;
@@ -16,15 +17,20 @@ import org.junit.jupiter.api.Test;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.geo.Point;
+import org.springframework.data.redis.connection.RedisGeoCommands;
 import org.springframework.data.redis.core.StringRedisTemplate;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static com.hepo.c2c.social.govern.mall.utils.RedisConstants.LOGIN_USER_KEY;
+import static com.hepo.c2c.social.govern.mall.utils.RedisConstants.SHOP_GEO_KEY;
 
 @SpringBootTest(classes = MallApplication.class)
 public class AppTest {
@@ -48,6 +54,31 @@ public class AppTest {
         lock = redissonClient.getLock("voucher");
     }
 
+    /**
+     * 加载商户geo数据到redis
+     */
+    @Test
+    public void loadShopData() {
+        //1.查询店铺信息
+        List<Shop> shopList = shopService.list();
+
+        //2.把店铺分组，按照typeId分组，typeId一致的放到一个集合
+        Map<Long, List<Shop>> typeShopMap = shopList.stream().collect(Collectors.groupingBy(Shop::getTypeId));
+
+        //3.分批写入redis
+        for (Map.Entry<Long, List<Shop>> entry : typeShopMap.entrySet()) {
+            //3.1组装redis key
+            Long typeId = entry.getKey();
+            String redisKey = SHOP_GEO_KEY + typeId;
+            //3.2获取同类型的店铺的集合
+            List<Shop> shops = entry.getValue();
+            List<RedisGeoCommands.GeoLocation<String>> locations = new ArrayList<>(shops.size());
+            for (Shop shop : shops) {
+                locations.add(new RedisGeoCommands.GeoLocation<>(shop.getId().toString(), new Point(shop.getX(), shop.getY())));
+            }
+            stringRedisTemplate.opsForGeo().add(redisKey, locations);
+        }
+    }
 
     @Test
     public void redisTest() {
