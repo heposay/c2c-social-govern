@@ -70,10 +70,6 @@
 
 ![服务注册中心选型对比](https://tva1.sinaimg.cn/large/e6c9d24egy1h52w1ni5hoj21jt0j0wgj.jpg)
 
-> Nacos 注册中心
-
-![Nacos架构原理](https://tva1.sinaimg.cn/large/e6c9d24egy1h52w9jncmtj210m0kkgnq.jpg)
-
 > Nacos 底层原理
 
 Nacos是实现了spring cloud alibaba下面的ServiceRegistry的接口，NacosServiceRegistry就是实现类，实现了**register、deregister、close、setStatus、getStatus**之类的方法
