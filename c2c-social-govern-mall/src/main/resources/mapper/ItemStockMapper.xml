@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hepo.c2c.social.govern.mall.mapper.ItemStockMapper">
+  <resultMap id="BaseResultMap" type="com.hepo.c2c.social.govern.mall.domain.ItemStock">
+    <!--@mbg.generated-->
+    <!--@Table tb_item_stock-->
+    <id column="item_id" jdbcType="BIGINT" property="itemId" />
+    <result column="stock" jdbcType="INTEGER" property="stock" />
+    <result column="sold" jdbcType="INTEGER" property="sold" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    item_id, stock, sold
+  </sql>
+</mapper>

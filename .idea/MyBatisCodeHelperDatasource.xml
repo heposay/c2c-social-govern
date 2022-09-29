@@ -231,6 +231,25 @@
                 </TableGenerateConfig>
               </value>
             </entry>
+            <entry key="c2c_mall:tb_item">
+              <value>
+                <TableGenerateConfig>
+                  <option name="generatedKey" value="id" />
+                  <option name="javaModelName" value="Item" />
+                  <option name="moduleName" value="c2c-social-govern-mall" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
+            <entry key="c2c_mall:tb_item_stock">
+              <value>
+                <TableGenerateConfig>
+                  <option name="javaModelName" value="ItemStock" />
+                  <option name="moduleName" value="c2c-social-govern-mall" />
+                  <option name="useActualColumnName" value="false" />
+                </TableGenerateConfig>
+              </value>
+            </entry>
             <entry key="c2c_mall:tb_seckill_voucher">
               <value>
                 <TableGenerateConfig>
