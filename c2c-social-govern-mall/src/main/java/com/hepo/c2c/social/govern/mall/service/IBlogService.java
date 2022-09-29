@@ -27,4 +27,5 @@ public interface IBlogService extends IService<Blog> {
 
     ResultObject<ScrollResult> queryBlogByFollow(Long max, Integer offset);
 
+    ResultObject<String> saveBlog(Blog blog);
 }

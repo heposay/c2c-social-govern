@@ -28,13 +28,9 @@ public class BlogController {
     @Resource
     private IBlogService blogService;
 
-    @PostMapping("/add")
-    public ResultObject<String> addBlog(@RequestBody Blog blog) {
-        //获取登录用户
-        UserDTO user = UserHolder.getUser();
-        blog.setUserId(Long.valueOf(user.getId()));
-        blogService.save(blog);
-        return ResultObject.success("保存笔记成功！");
+    @PostMapping("/save")
+    public ResultObject<String> saveBlog(@RequestBody Blog blog) {
+        return blogService.saveBlog(blog);
     }
 
     /**

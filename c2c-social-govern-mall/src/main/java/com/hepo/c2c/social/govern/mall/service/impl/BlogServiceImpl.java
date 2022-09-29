@@ -5,11 +5,13 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hepo.c2c.social.govern.mall.domain.Blog;
+import com.hepo.c2c.social.govern.mall.domain.Follow;
 import com.hepo.c2c.social.govern.mall.domain.User;
 import com.hepo.c2c.social.govern.mall.dto.ScrollResult;
 import com.hepo.c2c.social.govern.mall.dto.UserDTO;
 import com.hepo.c2c.social.govern.mall.mapper.BlogMapper;
 import com.hepo.c2c.social.govern.mall.service.IBlogService;
+import com.hepo.c2c.social.govern.mall.service.IFollowService;
 import com.hepo.c2c.social.govern.mall.service.IUserService;
 import com.hepo.c2c.social.govern.mall.utils.UserHolder;
 import com.hepo.c2c.social.govern.vo.ResultObject;
@@ -20,13 +22,10 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.hepo.c2c.social.govern.mall.utils.RedisConstants.BLOG_FEED_KEY;
-import static com.hepo.c2c.social.govern.mall.utils.RedisConstants.BLOG_LIKE_KEY;
+import static com.hepo.c2c.social.govern.mall.utils.RedisConstants.*;
 import static com.hepo.c2c.social.govern.mall.utils.SystemConstants.MAX_PAGE_SIZE;
 
 /**
@@ -41,6 +40,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements IB
 
     @Resource
     private IUserService userService;
+
+    @Resource
+    private IFollowService followService;
 
     @Resource
     private StringRedisTemplate stringRedisTemplate;
@@ -146,15 +148,67 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements IB
         String key = BLOG_FEED_KEY + userId;
         //2.查询收件箱 ZREVRANGEBYSCORE key Max Min LIMIT offset count
         Set<ZSetOperations.TypedTuple<String>> typedTuples = stringRedisTemplate.opsForZSet()
-                .reverseRangeByScoreWithScores(key, 0, max, offset, 2);
+                .reverseRangeByScoreWithScores(key, 0, max, offset, MAX_PAGE_SIZE);
         //3.非空判断
         if (typedTuples == null || typedTuples.isEmpty()) {
             return ResultObject.success(new ScrollResult());
         }
+        List<Long> ids = new ArrayList<>(typedTuples.size());
+        long minTime = 0;
+        int newOffset = 1;
         //4.解析数据：blogId、minTime（时间戳）、offset
+        for (ZSetOperations.TypedTuple<String> typedTuple : typedTuples) {
+            //添加blogId
+            ids.add(Long.valueOf(Objects.requireNonNull(typedTuple.getValue())));
+            //获取时间戳
+            long timestamp = typedTuple.getScore().longValue();
+            //针对同样的时间戳做处理
+            if (timestamp == minTime) {
+                newOffset++;
+            } else {
+                minTime = timestamp;
+                newOffset = 1;
+            }
+        }
+        newOffset = minTime == max ? newOffset : newOffset + offset;
+
         // 5.根据id查询blog
+        String idStr = StrUtil.join(",", ids);
+        List<Blog> list = query().in("id", ids).last("ORDER BY FIELD(id, " + idStr + ")").list();
+        list.forEach(b -> {
+            // 5.1.查询blog有关的用户
+            queryBlogUser(b);
+            // 5.2.查询blog是否被点赞
+            isBlogLiked(b);
+        });
         // 6.封装并返回
-        return null;
+        ScrollResult result = new ScrollResult();
+        result.setList(list);
+        result.setOffset(newOffset);
+        result.setMinTime(minTime);
+        return ResultObject.success(result);
+    }
+
+    @Override
+    public ResultObject<String> saveBlog(Blog blog) {
+        //获取登录用户
+        UserDTO user = UserHolder.getUser();
+        blog.setUserId(Long.valueOf(user.getId()));
+        //2.保存探店笔记
+        boolean isSuucess = save(blog);
+        if (!isSuucess) {
+            return ResultObject.error("新增探店笔记失败!");
+        }
+        //3.查询笔记作者的所有粉丝 select * from tb_follow where follow_user_id = ?
+        List<Follow> followList = followService.query().eq("follow_user_id", user.getId()).list();
+        if (followList.size() > 0) {
+            for (Follow follow : followList) {
+                //4.推送笔记id给所有粉丝
+                String key = BLOG_FEED_KEY + follow.getUserId();
+                stringRedisTemplate.opsForZSet().add(key, blog.getId().toString(), System.currentTimeMillis());
+            }
+        }
+        return ResultObject.success("新增探店笔记成功!");
     }
 
     private void queryBlogUser(Blog blog) {
